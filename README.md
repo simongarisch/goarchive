@@ -7,8 +7,10 @@ go get github.com/simongarisch/goarchive
 
 ## Usage
 ```go
+package main
+
 import (
-    "strings"
+	"strings"
 
 	"github.com/simongarisch/goarchive"
 )
@@ -20,13 +22,13 @@ func archiveCsv(filePath string) bool {
 	return false
 }
 
-func main(){
-	archive := Archive{
+func main() {
+	archive := goarchive.Archive{
 		SourceFolderPath:  "test_folder",
 		ArchiveFolderName: "archive",
 		FileFilterFunc:    archiveCsv,
-    }
-    
-    archive.Run()
+	}
+
+	archive.Run()
 }
 ```
