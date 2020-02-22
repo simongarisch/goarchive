@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/simongarisch/goarchive.svg?branch=master)](https://travis-ci.com/simongarisch/goarchive)
+
 # goarchive
 
 ## Installation
