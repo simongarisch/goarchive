@@ -14,9 +14,9 @@ func TestValidateOptions(t *testing.T) {
 		fileFilterFunc:    fileFilterFunc,
 	}
 
-	err := ValidateOptions(options)
+	err := validateOptions(options)
 	actual := err.Error()
-	expected := "Source folder path doesn't exist."
+	expected := "source folder path doesn't exist"
 	if actual != expected {
 		t.Errorf("Error actual = %v, and Expected = %v.", actual, expected)
 	}
