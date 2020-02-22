@@ -51,7 +51,7 @@ func TestSourceFolderExists(t *testing.T) {
 
 	err = validateOptions(options)
 	if err != nil {
-		t.Error(err.Error())
+		t.Error(err)
 	}
 
 	os.RemoveAll(sourceFolder)
