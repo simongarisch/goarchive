@@ -2,7 +2,9 @@ package goarchive
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
 )
 
 // Archive settings when running the archive job.
@@ -22,6 +24,44 @@ func (archive *Archive) validate() error {
 
 // Run our archive job
 func (archive *Archive) Run() error {
+	err := archive.validate()
+	if err != nil {
+		return err
+	}
+
+	files, err := ioutil.ReadDir(archive.sourceFolderPath)
+	if err != nil {
+		return err
+	}
+
+	if len(files) == 0 {
+		return nil
+	}
+
+	// create the archive folder if it doesn't exist
+	archiveFolderPath := path.Join(archive.sourceFolderPath, archive.archiveFolderName)
+	if !folderExists(archiveFolderPath) {
+		err := os.MkdirAll(archiveFolderPath, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	// files contains os.FileInfo types, which provide the methods
+	// https://golang.org/pkg/os/#FileInfo
+	for _, f := range files {
+		fileName := f.Name()
+		mustArchiveFile := archive.fileFilterFunc(fileName)
+		if mustArchiveFile {
+			oldPath := path.Join(archive.sourceFolderPath, fileName)
+			newPath := path.Join(archiveFolderPath, fileName)
+			err := os.Rename(oldPath, newPath)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }
 

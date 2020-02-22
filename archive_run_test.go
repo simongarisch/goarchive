@@ -2,6 +2,7 @@ package goarchive
 
 import (
 	"errors"
+	"io/ioutil"
 	"os"
 	"path"
 	"strings"
@@ -38,9 +39,15 @@ func createTestData() error {
 		"txt1.txt",
 		"txt2.txt",
 	}
+
+	err := os.MkdirAll(sourceFolderPath, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
 	for _, fileName := range files {
 		filePath := path.Join(sourceFolderPath, fileName)
-		err := os.MkdirAll(filePath, os.ModePerm)
+		err := ioutil.WriteFile(filePath, []byte("Hello"), 0755)
 		if err != nil {
 			return err
 		}
@@ -86,9 +93,9 @@ func getArchiveMap() (map[string]bool, error) {
 			return archiveMap, errors.New("File is both in source and archive folder")
 		}
 		if inSourceFolder {
-			archiveMap[fileName] = true
-		} else {
 			archiveMap[fileName] = false
+		} else {
+			archiveMap[fileName] = true
 		}
 	}
 
@@ -153,6 +160,38 @@ func TestArchiveAll(t *testing.T) {
 	for fileName, isArchived := range archiveMap {
 		if isArchived == false {
 			t.Errorf("%s - All files should be archived", fileName)
+		}
+	}
+
+	removeTestData()
+}
+
+func TestArchiveCsv(t *testing.T) {
+	err := resetTestData()
+	if err != nil {
+		t.Error(err)
+	}
+
+	archive := Archive{
+		sourceFolderPath:  sourceFolderPath,
+		archiveFolderName: archiveFolderName,
+		fileFilterFunc:    archiveCsv,
+	}
+
+	err = archive.Run()
+	if err != nil {
+		t.Error(err)
+	}
+
+	archiveMap, err := getArchiveMap()
+	if err != nil {
+		t.Error(err)
+	}
+
+	// all should be archived
+	for fileName, isArchived := range archiveMap {
+		if isArchived == false && strings.HasSuffix(fileName, ".csv") {
+			t.Errorf("%s - All csv files should be archived", fileName)
 		}
 	}
 
