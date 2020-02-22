@@ -11,13 +11,13 @@ func fileFilterFunc(filePath string) bool {
 
 func TestSourceFolderDoesntExist(t *testing.T) {
 
-	options := ArchiveOptions{
+	archive := Archive{
 		sourceFolderPath:  "not_a_folder",
 		archiveFolderName: "archive",
 		fileFilterFunc:    fileFilterFunc,
 	}
 
-	err := validateOptions(options)
+	err := archive.validate()
 	actual := err.Error()
 	expected := "source folder path doesn't exist"
 	if actual != expected {
@@ -29,7 +29,7 @@ func TestSourceFolderDoesntExist(t *testing.T) {
 func TestSourceFolderExists(t *testing.T) {
 	sourceFolder := "test_folder"
 
-	exists, err := folderExists(sourceFolder)
+	exists := folderExists(sourceFolder)
 
 	if exists {
 		err := os.RemoveAll(sourceFolder)
@@ -38,18 +38,18 @@ func TestSourceFolderExists(t *testing.T) {
 		}
 	}
 
-	err = os.Mkdir(sourceFolder, os.ModePerm)
+	err := os.Mkdir(sourceFolder, os.ModePerm)
 	if err != nil {
 		t.Error("Unable to create test folder")
 	}
 
-	options := ArchiveOptions{
+	archive := Archive{
 		sourceFolderPath:  sourceFolder,
 		archiveFolderName: "archive",
 		fileFilterFunc:    fileFilterFunc,
 	}
 
-	err = validateOptions(options)
+	err = archive.validate()
 	if err != nil {
 		t.Error(err)
 	}
