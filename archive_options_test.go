@@ -12,9 +12,9 @@ func fileFilterFunc(filePath string) bool {
 func TestSourceFolderDoesntExist(t *testing.T) {
 
 	archive := Archive{
-		sourceFolderPath:  "not_a_folder",
-		archiveFolderName: "archive",
-		fileFilterFunc:    fileFilterFunc,
+		SourceFolderPath:  "not_a_folder",
+		ArchiveFolderName: "archive",
+		FileFilterFunc:    fileFilterFunc,
 	}
 
 	err := archive.validate()
@@ -44,9 +44,9 @@ func TestSourceFolderExists(t *testing.T) {
 	}
 
 	archive := Archive{
-		sourceFolderPath:  sourceFolder,
-		archiveFolderName: "archive",
-		fileFilterFunc:    fileFilterFunc,
+		SourceFolderPath:  sourceFolder,
+		ArchiveFolderName: "archive",
+		FileFilterFunc:    fileFilterFunc,
 	}
 
 	err = archive.validate()

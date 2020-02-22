@@ -9,13 +9,13 @@ import (
 
 // Archive settings when running the archive job.
 type Archive struct {
-	sourceFolderPath  string
-	archiveFolderName string
-	fileFilterFunc    func(string) bool
+	SourceFolderPath  string
+	ArchiveFolderName string
+	FileFilterFunc    func(string) bool
 }
 
 func (archive *Archive) validate() error {
-	exists := folderExists(archive.sourceFolderPath)
+	exists := folderExists(archive.SourceFolderPath)
 	if !exists {
 		return errors.New("source folder path doesn't exist")
 	}
@@ -29,7 +29,7 @@ func (archive *Archive) Run() error {
 		return err
 	}
 
-	files, err := ioutil.ReadDir(archive.sourceFolderPath)
+	files, err := ioutil.ReadDir(archive.SourceFolderPath)
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func (archive *Archive) Run() error {
 	}
 
 	// create the archive folder if it doesn't exist
-	archiveFolderPath := path.Join(archive.sourceFolderPath, archive.archiveFolderName)
+	archiveFolderPath := path.Join(archive.SourceFolderPath, archive.ArchiveFolderName)
 	if !folderExists(archiveFolderPath) {
 		err := os.MkdirAll(archiveFolderPath, os.ModePerm)
 		if err != nil {
@@ -51,9 +51,9 @@ func (archive *Archive) Run() error {
 	// https://golang.org/pkg/os/#FileInfo
 	for _, f := range files {
 		fileName := f.Name()
-		mustArchiveFile := archive.fileFilterFunc(fileName)
+		mustArchiveFile := archive.FileFilterFunc(fileName)
 		if mustArchiveFile {
-			oldPath := path.Join(archive.sourceFolderPath, fileName)
+			oldPath := path.Join(archive.SourceFolderPath, fileName)
 			newPath := path.Join(archiveFolderPath, fileName)
 			err := os.Rename(oldPath, newPath)
 			if err != nil {

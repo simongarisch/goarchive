@@ -109,9 +109,9 @@ func TestArchiveNone(t *testing.T) {
 	}
 
 	archive := Archive{
-		sourceFolderPath:  sourceFolderPath,
-		archiveFolderName: archiveFolderName,
-		fileFilterFunc:    archiveNone,
+		SourceFolderPath:  sourceFolderPath,
+		ArchiveFolderName: archiveFolderName,
+		FileFilterFunc:    archiveNone,
 	}
 
 	err = archive.Run()
@@ -141,9 +141,9 @@ func TestArchiveAll(t *testing.T) {
 	}
 
 	archive := Archive{
-		sourceFolderPath:  sourceFolderPath,
-		archiveFolderName: archiveFolderName,
-		fileFilterFunc:    archiveAll,
+		SourceFolderPath:  sourceFolderPath,
+		ArchiveFolderName: archiveFolderName,
+		FileFilterFunc:    archiveAll,
 	}
 
 	err = archive.Run()
@@ -173,9 +173,9 @@ func TestArchiveCsv(t *testing.T) {
 	}
 
 	archive := Archive{
-		sourceFolderPath:  sourceFolderPath,
-		archiveFolderName: archiveFolderName,
-		fileFilterFunc:    archiveCsv,
+		SourceFolderPath:  sourceFolderPath,
+		ArchiveFolderName: archiveFolderName,
+		FileFilterFunc:    archiveCsv,
 	}
 
 	err = archive.Run()
