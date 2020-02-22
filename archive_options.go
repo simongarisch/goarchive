@@ -12,9 +12,17 @@ type ArchiveOptions struct {
 	fileFilterFunc    func(string) bool
 }
 
+func folderExists(folderPath string) (bool, error) {
+	stat, err := os.Stat(folderPath)
+	if err == nil && stat.IsDir() {
+		return true, err
+	}
+	return false, err
+}
+
 func validateOptions(options ArchiveOptions) error {
-	stat, err := os.Stat(options.sourceFolderPath)
-	if err != nil || !stat.IsDir() {
+	exists, err := folderExists(options.sourceFolderPath)
+	if err != nil || !exists {
 		return fmt.Errorf("source folder path doesn't exist")
 	}
 	return err
