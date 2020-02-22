@@ -1,7 +1,7 @@
 package goarchive
 
 import (
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"os"
 	"path"
@@ -17,7 +17,7 @@ type Archive struct {
 func (archive *Archive) validate() error {
 	exists := folderExists(archive.sourceFolderPath)
 	if !exists {
-		return fmt.Errorf("source folder path doesn't exist")
+		return errors.New("source folder path doesn't exist")
 	}
 	return nil
 }
